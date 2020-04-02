@@ -29,6 +29,38 @@ You, as well as all other users on the site, will see the on-time rendering on t
 
 I recommend using a reverse proxy like nginx, you need to make sure that port `8081` (http) and `8082` (ws) is available.
 
+This config will do:
+
+```
+server {
+    listen 80;
+    listen [::]:80;
+    server_name <your.tld>;
+    location / {
+        proxy_set_header        REMOTE_USER         $remote_user;
+        proxy_set_header        Host                $host;
+        proxy_pass http://<your-ip>:8081/;
+    }
+}
+server {
+    listen 8082;
+    listen [::]:8082;
+    server_name <your.tld>;
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://<your-ip>:8082/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+}
+```
+
+Make sure you replace the stuff in the angle brackets `<your ..>`!
+
+And be sure to **forward the port `8082` in your router**!
+
 You can then have nginx limit access, encrypt the traffic etc.
 
 ## Limitations
