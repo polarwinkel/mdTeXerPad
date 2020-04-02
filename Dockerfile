@@ -9,9 +9,12 @@ FROM debian:buster-slim
 RUN apt-get update && apt-get install -y python3 python3-websockets python3-markdown gunicorn3
 
 # copy stuff to the container
-RUN mkdir /mtb
-WORKDIR /mtb
+RUN mkdir /mtp
+WORKDIR /mtp
 COPY ./ ./
+RUN groupadd -r mtp && useradd --no-log-init -r -g mtp mtp
+RUN chown mtp:mtp * -R
+USER mtp
 
 EXPOSE 8081
 EXPOSE 8082
