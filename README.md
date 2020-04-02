@@ -3,7 +3,7 @@ Multi-User live-rendering Editor for Markdown with included LaTeX-Formulas
 
 ## What is this?
 
-This is a Webserver with a WebSocket-Server that offers a simple textfield to enter 
+![Screenshot of mdTeXerPad](mdTeXerPad.png)
 
 ## How to use this
 
@@ -31,6 +31,8 @@ You can then have nginx limit access, encrypt the traffic etc.
 
 This is intended for small use only!
 
-There is **just one Pad** to work on, and the code is definately **not optimized for fast execution**!
+- There is **just one Pad** to work on
+- the code is definately **not optimized for fast execution**
+- it is developed **only for Firefox** (uses MathML for LaTeX-Formulas)
 
 If you need it bigger feel free to fork and change this or commit a pull-request.
