@@ -5,7 +5,7 @@ Multi-User live-rendering Editor for Markdown with included LaTeX-Formulas
 
 ![Screenshot of mdTeXerPad](mdTeXerPad.png)
 
-On the left side you can type a mixture of MargDown with LaTeX-Formulas included.
+On the left side you can type a mixture of Markdown with LaTeX-Formulas included.
 
 You, as well as all other users on the site, will see the on-time rendering on the right.
 
