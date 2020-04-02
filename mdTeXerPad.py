@@ -36,97 +36,35 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
         # Send response status code
         self.send_response(200)
         # Send headers
+        if self.path.startswith('/static/'):
+            if self.path.endswith(".css"):
+                mimetype='text/css'
+                sendReply = True
+            elif self.path.endswith('.woff2'):
+                mimetype = 'application/font-woff2'
+                sendReply = True
+            if sendReply == True:
+                #Open the static file requested and send it
+                fipath = (str(os.getcwd())+self.path)
+                f = open(fipath, 'rb')
+                self.send_response(200)
+                self.send_header('Content-type',mimetype)
+                self.end_headers()
+                self.wfile.write(f.read())
+                f.close()
+            else:
+                self.send_error(501,'unsupported file type on path %s' % self.path)
+            return
         self.send_header('Content-type','text/html')
         self.end_headers()
- 
         # Send message back to client
-        message = '''
-                <!doctype html><html>
-                <head>
-                    <title>mdTeXerPad</title><meta charset="utf-8" />
-                </head>
-                <body style="background-color:#040;">
-                <h1>mdTeXerPad</h1>
-                <div id="notConnected" style="width:100%;background-color:#faa;display:none;">
-                    <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
-                </div>
-                <textarea id="mdtex" oninput="sendMdTeX()" style="width:49%; height:200px; float:left;" disabled></textarea>
-                <div id="htmlOut" style="border:1px solid black; width:49%; float:right; background-color:#fff;"></div>
-                <button id="editMode" onclick="window.location.assign(window.location.href.concat('edit'))">Edit this!</button></p>
-                <script>
-                function connect() {
-                    var mdtex = document.querySelector('#mdtex');
-                    try { 
-                        var ws = new WebSocket("ws://".concat(window.location.hostname, ":8082/"));
-                    } catch(e) {
-                        document.getElementById('notConnected').style.display='block';
-                    }
-                    mdtex.oninput = function (event) {
-                        if (window.location.pathname.endsWith('edit')) {
-                            try {
-                                ws.send(mdtex.value);
-                            } catch(e) {
-                                document.getElementById('notConnected').style.display='block';
-                            }
-                        } else {
-                            mdtex.disabled = true;
-                            alert('TODO: Besser machen!');
-                        }
-                    }
-                    ws.onmessage = function (event) {
-                        data = JSON.parse(event.data);
-                        out = document.getElementById('htmlOut');
-                        out.innerHTML = data.html;
-                        mdtex.value = data.mdtex;
-                        /*out.innerHTML = event.data;*/
-                    };
-                    ws.onopen = function (e) {
-                        document.getElementById('notConnected').style.display='none';
-                    };
-                    ws.onclose = function(e) {
-                        console.log('Socket is closed. Reconnect will be attempted in 3 seconds.', e.reason);
-                        setTimeout(function() {
-                            if (ws.readyState != 1) {
-                                document.getElementById('notConnected').style.display='block';
-                            }
-                            connect();
-                        }, 3000);
-                    }
-                    ws.onerror = function(err) {
-                        console.error('Socket encountered error: ', err.message, 'Closing socket');
-                        ws.close();
-                    };
-                }
-                connect();
-                if (window.location.pathname.endsWith('edit')) {
-                    mdtex.disabled = false;
-                    document.getElementById('editMode').style.display='none';
-                }
-document.onkeydown = function(e){
-    if(e.ctrlKey && e.which === 83){ // Check for the Ctrl key being pressed, and if the key = [S] (83)
-        alert('ERROR 501: TODO: speichern implementieren');
-        e.preventDefault();
-        return false;
-    }
-}
-                </script>
-                '''
-        message += '\n</body>\n</html>'
+        with open('static/page.html') as f:
+            page = f.read()
         # Write content as utf-8 data
-        self.wfile.write(bytes(message, "utf8"))
+        self.wfile.write(bytes(page, "utf8"))
         return
 
 # WebSocketServer-stuff:
-
-#async def socketMdTeX2html(websocket, path):
-#    '''Websocket-Server single-user-mode'''
-#    while True:
-#        try:
-#            mdtex = await websocket.recv()
-#            html = mdTeX2html.convert(mdtex)
-#            await websocket.send(html)
-#        except:
-#            pass
 
 USERS = set()
 mdtex = type('', (), {})() # empty object, so that it is available in all async functions

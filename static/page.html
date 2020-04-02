@@ -1,0 +1,77 @@
+<!doctype html><html>
+<head>
+    <title>mdTeXerPad</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="static/main.css" />
+    </head>
+    <body style="background-color:#040;">
+        <h3>mdTeXerPad</h3>
+        <div id="notConnected" style="width:100%;background-color:#faa;display:none;">
+            <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
+        </div>
+        <textarea id="mdtex" oninput="sendMdTeX()" style="width:49%; height:500px; float:left;" disabled></textarea>
+        <div id="htmlOut" style="border:1px solid black; width:49%; float:right; background-color:#fff; padding:1em;"></div>
+        <button id="editMode" onclick="window.location.assign(window.location.href.concat('edit'))" style="float:left;clear:both;">Edit this!</button></p>
+        <footer style="font-size:0.7em; float:right; clear:both; margin-bottom:1em;">
+            <p>(c) Dirk Winkel, licensed unter GPLv3 or newer - <a href="https://github.com/polarwinkel/mdTeXerPad" target="_blank">Fork me on GitHub</a></p>
+        </footer>
+        <script>
+            function connect() {
+                var mdtex = document.querySelector('#mdtex');
+                try { 
+                    var ws = new WebSocket("ws://".concat(window.location.hostname, ":8082/"));
+                } catch(e) {
+                    document.getElementById('notConnected').style.display='block';
+                }
+                mdtex.oninput = function (event) {
+                    if (window.location.pathname.endsWith('edit')) {
+                        try {
+                            ws.send(mdtex.value);
+                        } catch(e) {
+                            document.getElementById('notConnected').style.display='block';
+                        }
+                    } else {
+                        mdtex.disabled = true;
+                        alert('TODO: Besser machen!');
+                    }
+                }
+                ws.onmessage = function (event) {
+                    data = JSON.parse(event.data);
+                    out = document.getElementById('htmlOut');
+                    out.innerHTML = data.html;
+                    mdtex.value = data.mdtex;
+                    /*out.innerHTML = event.data;*/
+                };
+                ws.onopen = function (e) {
+                    document.getElementById('notConnected').style.display='none';
+                };
+                ws.onclose = function(e) {
+                    console.log('Socket is closed. Reconnect will be attempted in 3 seconds.', e.reason);
+                    setTimeout(function() {
+                        if (ws.readyState != 1) {
+                            document.getElementById('notConnected').style.display='block';
+                        }
+                        connect();
+                    }, 3000);
+                }
+                ws.onerror = function(err) {
+                    console.error('Socket encountered error: ', err.message, 'Closing socket');
+                    ws.close();
+                };
+            }
+            connect();
+            if (window.location.pathname.endsWith('edit')) {
+                mdtex.disabled = false;
+                document.getElementById('editMode').style.display='none';
+            }
+            document.onkeydown = function(e){
+                if(e.ctrlKey && e.which === 83){ // Check for the Ctrl key being pressed, and if the key = [S] (83)
+                    alert('ERROR 501: TODO: speichern implementieren');
+                    e.preventDefault();
+                    return false;
+                }
+            }
+        </script>
+    </body>
+</html>

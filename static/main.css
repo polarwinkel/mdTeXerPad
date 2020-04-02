@@ -11,17 +11,7 @@ html {
     font-size: 1.6em;
 }
 body {
-    max-width: 60rem;
-    margin: auto;
-    margin-top: 0.8rem;
-    margin-bottom: 0.8rem;
-    background-color: white;
     padding: 0.4rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
-nav#pagenav {
-    text-align: center;
 }
 a {
     color:#060;
@@ -35,27 +25,6 @@ img {
     max-width: 100%;
 }
 /* stuff for forms: */
-label{
-    display: inline-block;
-    float: left;
-    clear: left;
-    width: 250px;
-    text-align: right;
-    margin-right: 0.5rem;
-    font-size: 1rem;
-}
-input {
-    font-size: 1rem;
-/*    width: 500px;*/
-    max-width:100%;
-/*    min-width:250px;*/
-}
-select {
-    font-size: 1rem;
-    width: 500px;
-    max-width:100%;
-/*    min-width:250px;*/
-}
 textarea {
     display: inline-block;
     float: left;
@@ -74,40 +43,7 @@ button {
 p {
     page-break-inside: avoid;
 }
-/*@font-face {
-  font-family: "latin modern roman";
-  src: url(sansation_light.woff);
-}*/
-/* for desktops */
-@media only screen and (min-width: 600px) {
-    html {
-        margin: 1em;
-    }
-    body {
-        padding: 4em;
-        padding-top: 1em;
-        padding-bottom: 1em;
-    }
-}
-/* print */
-@page {
-    size: A4;
-    margin: 0;
-    margin-bottom: 1cm;
-}
-@page :first {
-    margin-top: 0;
-}
-@media print {
-    html, body {
-        width: 21cm;
-        height: 29.7cm;
-    }
-    .no-print, .no-print
-    {
-        display: none !important;
-    }
-}
+/* fonts */
 @font-face {
     font-family: "latin modern roman";
     src: url("lmroman10-regular.woff2") format('woff2');
