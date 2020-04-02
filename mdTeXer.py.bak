@@ -1,0 +1,170 @@
+#!/usr/bin/python3
+# TODO: Qt WebChannel checken!
+'''
+Base file of mdTeXer
+
+This starts a Webserver and a WebSocketServer at the same time on different ports.
+'''
+
+import os
+from http.server import BaseHTTPRequestHandler, HTTPServer
+import asyncio
+import websockets
+import datetime
+import random
+from multiprocessing import Process
+# convertions to html:
+from modules import mdTeX2html
+
+# global settings:
+
+webServerPort = 8081
+wsServerPort = 8082
+
+# WebServer stuff:
+
+class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
+    ''' HTTPRequestHandler class '''
+    def do_HEAD(s):
+        s.send_response(200)
+        s.send_header("Content-type", "text/html")
+        s.end_headers()
+    # GET
+    def do_GET(self):
+        # Send response status code
+        self.send_response(200)
+        # Send headers
+        self.send_header('Content-type','text/html')
+        self.end_headers()
+ 
+        # Send message back to client
+        message = '''
+                <!doctype html><html>
+                <head>
+                    <title>mdTeXer</title><meta charset="utf-8" />
+                </head>
+                <body style="background-color:#040;">
+                <h1>mdTeXer</h1>
+                <div id="notConnected" style="width:100%;background-color:#faa;display:none;">
+                    <p style="text-align:center;">Not connected to WebSocketServer! <!--<button onclick="connect()">Reconnect</button>--></p>
+                </div>
+                <textarea id="mdtex" oninput="sendMdTeX()" style="width:49%; height:200px; float:left;">
+# Title
+
+TeX-Formula: $\sqrt2=x^2 \Rightarrow x=\sqrt{\sqrt{2}}$
+
+- This
+- is
+    - a List.</textarea>
+                <div id="htmlOut" style="border:1px solid black; width:49%; float:right; background-color:#fff;"></div>
+                <script>
+                    var ws = new WebSocket('ws://127.0.0.1:8082/');
+                    function sendMdTeX() {
+                        var mdtex = document.getElementById('mdtex').value;
+                        ws.send(mdtex);
+                    }
+                    function connect() {
+                        ws = new WebSocket('ws://127.0.0.1:8082/');
+                        ws.onopen = function (e) {
+                            document.getElementById('notConnected').style.display='none';
+                            sendMdTeX();
+                        };
+                        ws.onmessage = function (event) {
+                            out = document.getElementById('htmlOut');
+                            out.innerHTML = event.data;
+                        };
+                        ws.onclose = function(e) {
+                            console.log('Socket is closed. Reconnect will be attempted in 3 seconds.', e.reason);
+                            setTimeout(function() {
+                                if (ws.readyState != 1) {
+                                    document.getElementById('notConnected').style.display='block';
+                                }
+                                connect();
+                            }, 3000);
+                        }
+                        ws.onerror = function(err) {
+                            console.error('Socket encountered error: ', err.message, 'Closing socket');
+                            ws.close();
+                        };
+                    }
+                    connect();
+document.onkeydown = function(e){
+    if(e.ctrlKey && e.which === 83){ // Check for the Ctrl key being pressed, and if the key = [S] (83)
+        alert('TODO: speichern');
+        e.preventDefault();
+        return false;
+    }
+}
+                </script>
+                '''
+        message += '\n</body>\n</html>'
+        # Write content as utf-8 data
+        self.wfile.write(bytes(message, "utf8"))
+        return
+
+# WebSocketServer-stuff:
+
+CLIENTS = set()
+
+#async def socketMdTeX2html(websocket, path):
+#    '''Webdocket-Server'''
+#    while True:
+#        try:
+#            mdtex = await websocket.recv()
+#            html = mdTeX2html.convert(mdtex)
+#            await websocket.send(html)
+#        except:
+#            pass
+
+
+async def broadcast():
+    while True:
+        try:
+            for ws in CLIENTS:
+                mdtex = await ws.recv()
+            html = mdTeX2html.convert(mdtex)
+            for ws in CLIENTS:
+                await ws.send(html)
+        except:
+            pass
+        #await asyncio.gather(
+        #    *[ws.send("woof") for ws in CLIENTS],
+        #    return_exceptions=False,
+        #)
+        #await asyncio.sleep(2)
+asyncio.create_task(broadcast())
+
+async def wsHandler(websocket, path):
+    CLIENTS.add(websocket)
+    try:
+        async for msg in websocket:
+            pass
+    except websockets.ConnectionClosedError:
+        pass
+    finally:
+        CLIENTS.remove(websocket)
+
+# get it started:
+
+def runWebServer():
+    ''' start the webserver '''
+    print('starting webserver')
+    server_address = ('127.0.0.1', webServerPort)
+    httpd = HTTPServer(server_address, testHTTPServer_RequestHandler)
+    print('server is running')
+    httpd.serve_forever()
+
+def runWsServer():
+    ''' start the websocket-server '''
+    start_server = websockets.serve(wsHandler, "127.0.0.1", wsServerPort)
+    ws = asyncio.get_event_loop()
+    ws.run_until_complete(start_server)
+    ws.run_forever()
+
+#runServer()
+#connection.close()
+
+wsServer = Process(target=runWsServer, args=())
+wsServer.start()
+webServer = Process(target=runWebServer, args=())
+webServer.start()
