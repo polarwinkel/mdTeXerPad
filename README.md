@@ -36,7 +36,7 @@ You can then have nginx limit access, encrypt the traffic etc.
 This is intended for small use only!
 
 - There is **just one Pad** to work on
-- the code is definately **not optimized for fast execution**
+- the code is definitely **not optimized for fast execution**
 - it is developed **only for Firefox** (uses MathML for LaTeX-Formulas)
 
 If you need it bigger feel free to fork and change this or commit a pull-request.
