@@ -70,5 +70,6 @@ This is intended for small use only!
 - There is **just one Pad** to work on
 - the code is definitely **not optimized for fast execution**
 - it is developed **only for Firefox** (uses MathML for LaTeX-Formulas)
+- it is **not checked for security issues**, be sure to restrict access to trusted persons!
 
 If you need it bigger feel free to fork and change this or commit a pull-request.
