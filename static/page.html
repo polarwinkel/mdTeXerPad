@@ -4,16 +4,42 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" type="text/css" href="static/main.css" />
+        <style>
+            /* general */
+            div#htmlOut {
+                border:1px solid black;
+                width:49%;
+                float:right;
+                background-color:#fff;
+                padding:1rem;
+            }
+            textarea#mdtex {
+                width:49%;
+                height:500px;
+                float:left;
+            }
+            /* for mobiles */
+            @media only screen and (max-width: 600px) {
+            div#htmlOut {
+                width:100%;
+                margin:auto;
+                margin-bottom: 1rem;
+            }
+            textarea#mdtex {
+                width:100%;
+                margin:auto;
+            }
+        </style>
     </head>
     <body style="background-color:#040;">
         <h3>mdTeXerPad</h3>
         <div id="notConnected" style="width:100%;background-color:#faa;display:none;">
             <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
         </div>
-        <textarea id="mdtex" oninput="sendMdTeX()" style="width:49%; height:500px; float:left;" disabled></textarea>
-        <div id="htmlOut" style="border:1px solid black; width:49%; float:right; background-color:#fff; padding:1em;"></div>
+        <div id="htmlOut"></div>
+        <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
         <button id="editMode" onclick="window.location.assign(window.location.href.concat('edit'))" style="float:left;clear:both;">Edit this!</button></p>
-        <footer style="font-size:0.7em; float:right; clear:both; margin-bottom:1em;">
+        <footer style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
             <p>(c) Dirk Winkel, licensed unter GPLv3 or newer - <a href="https://github.com/polarwinkel/mdTeXerPad" target="_blank">Fork me on GitHub</a></p>
         </footer>
         <script>
