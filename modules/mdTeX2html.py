@@ -20,13 +20,13 @@ def convert(mdtex):
         found = True
         result = convert(parts[0])+'\n'
         try:
-            result += tex2mathml(parts[1])+'\n'
+            result += '<div class="blockformula">'+tex2mathml(parts[1])+'</div>\n'
         except:
-            result += '<font color="red">ERROR converting TeX2mathml</font>'
+            result += '<div class="blockformula"><font color="red">ERROR converting TeX2mathml</font></div>'
         try:
             result += convert('$$'.join(parts[2:]))
         except:
-            result += '<font color="red">ERROR: formula incomplete?</font>'
+            result += '<div class="blockformula"><font color="red">ERROR: formula incomplete?</font></div>'
     #else find first $-formulas:
     else:
         parts = re.split('\${1}', mdtex)
@@ -39,7 +39,7 @@ def convert(mdtex):
         if len(parts)>2:
             result = convert(parts[0]+mathml+'$'.join(parts[2:]))
         else:
-            result = convert(parts[0]+mathml+'<font color="red">ERROR formula incomplete</font>')
+            result = convert(parts[0]+mathml+'<font color="red">ERROR: formula incomplete</font>')
     # convert text recursively and formulas right away:
     if not found:
         # no more formulas found

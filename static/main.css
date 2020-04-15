@@ -21,6 +21,9 @@ a {
 math {
     font-size: 1rem;
 }
+div.blockformula {
+    text-align: center;
+}
 img {
     max-width: 100%;
 }
