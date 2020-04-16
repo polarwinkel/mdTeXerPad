@@ -36,6 +36,8 @@ def convert(mdtex):
             mathml = tex2mathml(parts[1])
         except:
             mathml = '<font color="red">ERROR converting TeX2mathml</font>'
+        if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts!
+            parts[0]=parts[0]+' '
         if len(parts)>2:
             result = convert(parts[0]+mathml+'$'.join(parts[2:]))
         else:
