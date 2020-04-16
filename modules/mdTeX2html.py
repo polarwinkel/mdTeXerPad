@@ -11,41 +11,72 @@ from latex2mathml.converter import convert as tex2mathml
 from markdown import markdown as md2html
 import re
 
+incomplete = '<font color="orange">Warning: Formula incomplete!'
+convError = '<font color="red">ERROR converting TeX2mathml!</font>'
+
 def convert(mdtex):
     ''' converts recursively the mdTeX-mixture to HTML with MathML '''
     found = False
     # find first $$-formula:
-    parts = re.split('\${2}', mdtex)
+    parts = re.split('\${2}', mdtex, 2)
     if len(parts)>1:
         found = True
         result = convert(parts[0])+'\n'
         try:
             result += '<div class="blockformula">'+tex2mathml(parts[1])+'</div>\n'
         except:
-            result += '<div class="blockformula"><font color="red">ERROR converting TeX2mathml</font></div>'
-        try:
-            result += convert('$$'.join(parts[2:]))
-        except:
-            result += '<div class="blockformula"><font color="red">ERROR: formula incomplete?</font></div>'
-    #else find first $-formulas:
+            result += '<div class="blockformula">'+convError+'</div>'
+        if len(parts)==3:
+            result += convert(parts[2])
+        else:
+            result += '<div class="blockformula">'+incomplete+'</font></div>'
+    # else find first $-formulas:
     else:
-        parts = re.split('\${1}', mdtex)
+        parts = re.split('\${1}', mdtex, 2)
     if len(parts)>1 and not found:
         found = True
         try:
             mathml = tex2mathml(parts[1])
         except:
-            mathml = '<font color="red">ERROR converting TeX2mathml</font>'
-        if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts!
+            mathml = convError
+        if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts before formula!
             parts[0]=parts[0]+' '
-        if len(parts)>2:
-            result = convert(parts[0]+mathml+'$'.join(parts[2:]))
+        if len(parts)==3:
+            result = convert(parts[0]+mathml+parts[2])
         else:
-            result = convert(parts[0]+mathml+'<font color="red">ERROR: formula incomplete</font>')
-    # convert text recursively and formulas right away:
+            result = convert(parts[0]+mathml+incomplete)
+    # else find first \[..\]-equation:
+    else:
+        parts = re.split(r'\\\[', mdtex, 1)
+    if len(parts)>1 and not found:
+        found = True
+        result = convert(parts[0])+'\n'
+        parts = re.split(r'\\\]', parts[1], 1)
+        try:
+            result += '<div class="blockformula">'+tex2mathml(parts[0])+'</div>\n'
+        except:
+            result += '<div class="blockformula">'+convError+'</div>'
+        if len(parts)==2:
+            result += convert(parts[1])
+        else:
+            result += '<div class="blockformula">'+incomplete+'</div>'
+    # else find first \(..\)-equation:
+    else:
+        parts = re.split(r'\\\(', mdtex, 1)
+    if len(parts)>1 and not found:
+        found = True
+        subp = re.split(r'\\\)', parts[1], 1)
+        try:
+            mathml = tex2mathml(subp[0])
+        except:
+            mathml = convError
+        if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts before formula!
+            parts[0]=parts[0]+' '
+        if len(subp)==2:
+            result = convert(parts[0]+mathml+subp[1])
+        else:
+            result = convert(parts[0]+mathml+incomplete)
     if not found:
         # no more formulas found
         result = md2html(mdtex)
-    # TODO: parse for \[ for newline and \( for inline-equations as well
-    # support for numbered or aligned equations is not planned at the moment
     return result

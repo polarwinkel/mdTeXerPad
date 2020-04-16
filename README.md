@@ -73,3 +73,7 @@ This is intended for small use only!
 - it is **not checked for security issues**, be sure to restrict access to trusted persons!
 
 If you need it bigger feel free to fork and change this or commit a pull-request.
+
+## You need just a Markdown-LaTeX-to-HTML-converter for your own project?
+
+Just grab the `mdTeX2html.py` from the `modules`-folder and the `latex2mathml` from [Ronie Martinez](https://github.com/roniemartinez/latex2mathml) which you find in pip as well. Thanks for this, Ronie!
