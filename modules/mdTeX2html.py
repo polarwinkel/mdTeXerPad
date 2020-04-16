@@ -11,7 +11,7 @@ from latex2mathml.converter import convert as tex2mathml
 from markdown import markdown as md2html
 import re
 
-incomplete = '<font color="orange">Warning: Formula incomplete!'
+incomplete = '<font color="orange">Warning: Formula incomplete!</font>'
 convError = '<font color="red">ERROR converting TeX2mathml!</font>'
 
 def convert(mdtex):
@@ -29,7 +29,7 @@ def convert(mdtex):
         if len(parts)==3:
             result += convert(parts[2])
         else:
-            result += '<div class="blockformula">'+incomplete+'</font></div>'
+            result += '<div class="blockformula">'+incomplete+'</div>'
     # else find first $-formulas:
     else:
         parts = re.split('\${1}', mdtex, 2)
