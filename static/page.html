@@ -49,7 +49,8 @@
         </div>
         <div id="htmlOut"></div>
         <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
-        <button id="editMode" onclick="window.location.assign(window.location.href.concat('edit'))" style="float:left;clear:both;">Edit this!</button></p>
+        <button id="editMode" onclick="window.location.assign(window.location.href.concat('edit'))" style="float:left;clear:both;">Edit this!</button>
+        <button id="hideCode" onclick="hideCode()" style="float:left;clear:both;">Hide Code!</button>
         <footer style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
             <p>(c) 2020 Dirk Winkel, licensed under GPLv3 or newer - <a href="https://github.com/polarwinkel/mdTeXerPad" target="_blank">Fork me on GitHub</a></p>
         </footer>
@@ -107,6 +108,22 @@
                     alert('ERROR 501: TODO: speichern implementieren');
                     e.preventDefault();
                     return false;
+                }
+            }
+            function hideCode() {
+                btn = document.getElementById('hideCode');
+                out = document.getElementById('htmlOut');
+                mdtex = document.querySelector('#mdtex');
+                if (btn.innerHTML == 'Hide Code!') {
+                    out.style.width='100%';
+                    //out.style.margin='auto';
+                    mdtex.style.display='none';
+                    btn.innerHTML = 'Show Code!';
+                } else {
+                    out.style.width='49%';
+                    //out.style.margin='auto';
+                    mdtex.style.display='block';
+                    btn.innerHTML = 'Hide Code!';
                 }
             }
         </script>
