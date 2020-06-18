@@ -6,18 +6,20 @@
         <link rel="stylesheet" type="text/css" href="static/main.css" />
         <style>
             /* general */
+            div#container {
+                display: flex;
+                flex-direction: row;
+                align-items: stretch;
+                justify-content: space-evenly;
+            }
             div#htmlOut {
                 border:1px solid black;
                 width:49%;
-                float:right;
                 background-color:#fff;
-                padding:1rem;
                 min-height:2rem;
             }
             textarea#mdtex {
                 width:49%;
-                height:500px;
-                float:left;
             }
             /* for mobiles */
             @media only screen and (max-width: 600px) {
@@ -47,8 +49,10 @@
         <div id="notConnected" style="width:100%;background-color:#faa;display:none;">
             <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
         </div>
-        <div id="htmlOut"></div>
-        <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
+        <div id="container">
+            <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
+            <div id="htmlOut"></div>
+        </div>
         <button id="editMode" onclick="window.location.assign(window.location.href.concat('edit'))" style="float:left;clear:both;">Edit this!</button>
         <button id="hideCode" onclick="hideCode()" style="float:left;clear:both;">Hide Code!</button>
         <footer style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
@@ -78,8 +82,12 @@
                     data = JSON.parse(event.data);
                     out = document.getElementById('htmlOut');
                     out.innerHTML = data.html;
-                    mdtex.value = data.mdtex;
-                    /*out.innerHTML = event.data;*/
+                    if (window.location.pathname.endsWith('edit') == false ||
+                            mdtex.value == '') {
+                        // just one person should edit at a time:
+                        // for more a cursor management would be necessary
+                        mdtex.value = data.mdtex;
+                    }
                 };
                 ws.onopen = function (e) {
                     document.getElementById('notConnected').style.display='none';

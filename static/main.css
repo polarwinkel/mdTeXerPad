@@ -30,12 +30,10 @@ img {
 /* stuff for forms: */
 textarea {
     display: inline-block;
-    float: left;
     font-size: 0.7rem;
     width: 100%;
     max-width:100%;
     min-width:250px;
-    height: 200px;
 }
 /* other stuff */
 button {
