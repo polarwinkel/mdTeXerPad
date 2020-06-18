@@ -23,24 +23,41 @@
             }
             /* for mobiles */
             @media only screen and (max-width: 600px) {
-            html {
-                margin: 0;
-                padding: 0;
+                html {
+                    margin: 0;
+                    padding: 0;
+                }
+                body {
+                    margin: 0.4;
+                    padding: 0;
+                }
+                textarea#mdtex {
+                    width:100%;
+                    margin:auto;
+                    height:250px;
+                }
+                div#htmlOut {
+                    width:100%;
+                    margin:auto;
+                    margin-bottom: 1rem;
+                    padding:0.2rem;
+                }
             }
-            body {
-                margin: 0.4;
-                padding: 0;
-            }
-            div#htmlOut {
-                width:100%;
-                margin:auto;
-                margin-bottom: 1rem;
-                padding:0.2rem;
-            }
-            textarea#mdtex {
-                width:100%;
-                margin:auto;
-                height:250px;
+            /* dark-mode */
+            @media (prefers-color-scheme: dark) {
+                textarea#mdtex {
+                    background-color: #222;
+                    color: white;
+                    border: 1px solid black;
+                }
+                textarea#mdtex:disabled {
+                    background-color: #111;
+                    color: #666;
+                }
+                div#htmlOut {
+                    background-color: #222;
+                    color: white;
+                }
             }
         </style>
     </head>
