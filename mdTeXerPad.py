@@ -117,7 +117,7 @@ def runWebServer():
     else: addr='0.0.0.0'
     server_address = (addr, webServerPort)
     httpd = HTTPServer(server_address, testHTTPServer_RequestHandler)
-    print('webserver is running')
+    print('webserver is running on port '+str(webServerPort))
     httpd.serve_forever()
 
 def runWsServer():
@@ -128,7 +128,7 @@ def runWsServer():
     start_server = websockets.serve(wsHandler, addr, wsServerPort)
     ws = asyncio.get_event_loop()
     ws.run_until_complete(start_server)
-    print('websocketserver is running')
+    print('websocketserver is running on port '+str(wsServerPort))
     ws.run_forever()
 
 wsServer = Process(target=runWsServer, args=())
