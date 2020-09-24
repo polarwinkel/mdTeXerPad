@@ -8,21 +8,22 @@
             /* general */
             div#container {
                 display: flex;
-                flex-direction: row;
+                flex-direction: row-reverse;
+                flex-wrap:wrap;
                 align-items: stretch;
                 justify-content: space-evenly;
             }
             div#htmlOut {
                 border:1px solid black;
-                width:49%;
+                width:65%;
                 background-color:#fff;
                 min-height:2rem;
             }
             textarea#mdtex {
-                width:49%;
+                width:33%;
             }
             /* for mobiles */
-            @media only screen and (max-width: 600px) {
+            @media only screen and (max-width: 980px) {
                 html {
                     margin: 0;
                     padding: 0;
@@ -67,8 +68,8 @@
             <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
         </div>
         <div id="container">
-            <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
             <div id="htmlOut"></div>
+            <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
         </div>
         <button id="editMode" onclick="window.location.assign(window.location.href.concat('edit'))" style="float:left;clear:both;">Edit this!</button>
         <button id="hideCode" onclick="hideCode()" style="float:left;clear:both;">Hide Code!</button>
