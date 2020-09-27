@@ -99,7 +99,7 @@ async def wsHandler(websocket, path):
         async for message in websocket:
             mdtex.value = message
             html = mdTeX2html.convert(message)
-            replyd = {'mdtex': message, 'html': unicode(html, "utf-8")}
+            replyd = {'mdtex': message, 'html': html}
             replyj = json.dumps(replyd)
             if USERS:  # asyncio.wait doesn't accept an empty list
                 await asyncio.wait([user.send(replyj) for user in USERS])
