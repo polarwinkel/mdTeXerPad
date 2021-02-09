@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full"  width="32" height="32">
+    <defs>
+        <linearGradient id="linearGradient" x1="0" y1="0" x2="0" y2="32" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#00cc00" />
+            <stop offset="1" stop-color="#004400" />
+        </linearGradient>
+    </defs>
+    <g>
+        <g type="rectangle">
+            <rect x="1" y="1" width="30" height="30" stroke-width="2" stroke="#333" rx="3" ry="3"  stroke-linejoin="round" fill="url(#linearGradient)"/>
+        </g>
+        <g type="text" font-family="sans-serif" fill="white" font-size="12" font-weight="bold">
+            <text x="4" y="14">md</text>
+            <text x="4" y="28">TeX</text>
+        </g>
+    </g>
+</svg>

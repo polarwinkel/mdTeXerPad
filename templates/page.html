@@ -79,11 +79,14 @@
         <script>
             function connect() {
                 var mdtex = document.querySelector('#mdtex');
-                try { 
-                    var ws = new WebSocket("ws://".concat(window.location.hostname, ":8082/"));
-                } catch(e) {
-                    document.getElementById('notConnected').style.display='block';
-                }
+                var ws = new WebSocket("ws://localhost:8000/ws");
+                //console.log(window.location.hostname);
+                //try { 
+                //    var ws = new WebSocket("ws://".concat(window.location.hostname, ":8000/"));
+                //    console.log(ws);
+                //} catch(e) {
+                //    document.getElementById('notConnected').style.display='block';
+                //}
                 mdtex.oninput = function (event) {
                     if (window.location.pathname.endsWith('edit')) {
                         try {
@@ -106,6 +109,7 @@
                         // for more a cursor management would be necessary
                         mdtex.value = data.mdtex;
                     }
+                    console.log(data.users + ' users connected');
                 };
                 ws.onopen = function (e) {
                     document.getElementById('notConnected').style.display='none';
