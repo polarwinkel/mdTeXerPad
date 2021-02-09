@@ -79,8 +79,7 @@
         <script>
             function connect() {
                 var mdtex = document.querySelector('#mdtex');
-                var ws = new WebSocket("ws://localhost:8000/ws");
-                //console.log(window.location.hostname);
+                var ws = new WebSocket('ws://'+window.location.hostname+':8000/ws');
                 //try { 
                 //    var ws = new WebSocket("ws://".concat(window.location.hostname, ":8000/"));
                 //    console.log(ws);
