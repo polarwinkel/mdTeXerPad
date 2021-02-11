@@ -2,6 +2,6 @@ version: "3"
 services:
   mdtexerpad:
     build: ./
-    container_name: mdtexerpad-experimental
+    container_name: mdtexerpad
     ports:
       - "8000:8000"
