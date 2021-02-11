@@ -63,14 +63,15 @@ def mdtex_socket(ws):
     app.logger.info('ws connected: '+str(request.remote_addr))
     if ws not in USERS:
         USERS.add(ws)
+    message = None
     while True:
-        message = ws.receive()
         if message != None:
             mdtex.value = str(message)
         html = mdTeX2html.convert(mdtex.value)
         replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
         replyj = json.dumps(replyd)
         asyncio.run(sendUpdate())
+        message = ws.receive()
 
 async def sendUpdate():
     html = mdTeX2html.convert(mdtex.value)
