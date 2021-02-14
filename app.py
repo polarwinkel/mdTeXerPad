@@ -32,11 +32,11 @@ host='0.0.0.0'
 
 # WebServer stuff:
 
-@app.route('/', methods=['GET'])
-@app.route('/edit', methods=['GET'])
-def index():
+@app.route('/', defaults={'path': ''}, methods=['GET'])
+@app.route('/<path:path>', methods=['GET'])
+def index(path):
     app.logger.info('http connection: '+str(request.remote_addr))
-    return render_template('page.html')
+    return render_template('page.html', path=path)
 
 @app.route('/static/<path:path>', methods=['GET'])
 def sendStatic(path):

@@ -77,15 +77,21 @@
             <p>(c) 2020-2021 Dirk Winkel, licensed under GPLv3 or newer - <a href="https://github.com/polarwinkel/mdTeXerPad" target="_blank">Fork me on GitHub</a></p>
         </footer>
         <script>
+            var subpath = '{{ path }}';
             function connect() {
                 var mdtex = document.querySelector('#mdtex');
-                var ws = new WebSocket('ws://'+window.location.hostname+':8000/ws');
-                //try { 
-                //    var ws = new WebSocket("ws://".concat(window.location.hostname, ":8000/"));
-                //    console.log(ws);
-                //} catch(e) {
-                //    document.getElementById('notConnected').style.display='block';
-                //}
+                if (window.location.protocol=='http:'){
+                    var wsPath = 'ws://';
+                } else {
+                    var wsPath = 'wss://';
+                }
+                wsPath += window.location.hostname+':'+window.location.port;
+                wsPath += window.location.pathname.replace(subpath,'')+'ws';// will run behind any proxied subpath
+                try {
+                    var ws = new WebSocket(wsPath);
+                } catch(e) {
+                    document.getElementById('notConnected').style.display='block';
+                }
                 mdtex.oninput = function (event) {
                     if (window.location.pathname.endsWith('edit')) {
                         try {

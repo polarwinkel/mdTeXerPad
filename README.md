@@ -14,16 +14,20 @@ You, as well as all other users on the site, will see the on-time rendering on t
 ### The native local way
 
 - clone the repository or download this
-- make sure you have `python3-markdown` and `python3-websockets` installed
-- Run the `mdTeXerPad.py`
-- point your Browser to `localhost:8081` and start to mdTeXing!
+- make sure you have the dependencies installed as listed in the `Dockerfile`
+- Run it by either
+    - executing `gunicorn3 -k flask_sockets.worker --bind 0.0.0.0:8000 app:app` (the performance-option)
+    - or `python3 app.py` (development-version)
+- point your Browser to `localhost:8000` and start to mdTeXing!
     - mdTeXerPad will also be available from your local network, you can change this by setting `onlyLocal = True` in the `mdTeXerPad.py`!
+
+It will _not_ run on Debian Buster and Ubuntu 20.04 without getting the dependencies from pip since some dependencies are missing (Buster) or broken (20.04). Debian Bullseye is fine!
 
 ### The Docker way
 
 - clone the repository or download this
 - run `docker-compose up -d`
-- point your browser to port `8081` of your docker-host, i.e. `127.0.0.1:8081`
+- point your browser to port `8000` of your docker-host, i.e. `127.0.0.1:8000`
 
 ### Getting it to the web
 
@@ -59,7 +63,7 @@ server {
 
 Make sure you replace the stuff in the angle brackets `<your ..>`!
 
-And be sure to **forward the port `8082` in your router**!
+And be sure to **forward the port `8000` in your router**!
 
 You can then have nginx limit access, encrypt the traffic etc.
 
@@ -67,9 +71,8 @@ You can then have nginx limit access, encrypt the traffic etc.
 
 This is intended for small use only!
 
-- There is **just one Pad** to work on
-- the code is definitely **not optimized for fast execution**
-- it is developed **only for Firefox** (uses MathML for LaTeX-Formulas)
+- There is **just one Pad** to work on (so far...)
+- it is developed **only for Firefox** (uses MathML for LaTeX-Formulas) **Edge/Chrome won't render formulas correctly**
 - it is **not checked for security issues**, be sure to restrict access to trusted persons!
 
 If you need it bigger feel free to fork and change this or commit a pull-request.
