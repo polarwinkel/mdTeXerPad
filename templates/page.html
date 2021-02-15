@@ -61,6 +61,10 @@
                     background-color: #222;
                     color: white;
                 }
+                button {
+                    background-color: #222;
+                    color: white;
+                }
             }
         </style>
     </head>
@@ -73,8 +77,10 @@
             <div id="htmlOut"></div>
             <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
         </div>
-        <button id="editMode" onclick="window.location.assign(window.location.href.concat('edit'))" style="float:left;clear:both;">Edit this!</button>
-        <button id="hideCode" onclick="hideCode()" style="float:left;clear:both;">Hide Code!</button>
+        <div style="text-align:center; clear:both; margin:1rem;">
+            <button id="editMode" onclick="edit()">Edit</button>
+            <button id="hideCode" onclick="hideCode()">Hide Code</button>
+        </div>
         <footer style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
             <p>(c) 2020-2021 Dirk Winkel, licensed under GPLv3 or newer - <a href="https://github.com/polarwinkel/mdTeXerPad" target="_blank">Fork me on GitHub</a></p>
         </footer>
@@ -138,7 +144,7 @@
             connect();
             if (window.location.pathname.endsWith('edit')) {
                 mdtex.disabled = false;
-                document.getElementById('editMode').style.display='none';
+                document.getElementById('editMode').innerHTML = 'Quit edit mode';
             }
             document.onkeydown = function(e){
                 if(e.ctrlKey && e.which === 83){ // Check for the Ctrl key being pressed, and if the key = [S] (83)
@@ -147,20 +153,32 @@
                     return false;
                 }
             }
+            function edit() {
+                btn = document.getElementById('editMode');
+                if (btn.innerHTML == 'Quit edit mode') {
+                    window.location.assign(window.location.href.slice(0, -4))
+                    btn.innerHTML = 'Edit';
+                } else {
+                    // TODO: Warn when someone is already editing? > get info from Server
+                    // Not blocking multiple editing users:
+                    // - would need a Moderator
+                    // - can be useful as it is
+                    window.location.assign(window.location.href.concat('edit'))
+                    btn.innerHTML = 'Quit edit mode';
+                }
+            }
             function hideCode() {
                 btn = document.getElementById('hideCode');
                 out = document.getElementById('htmlOut');
                 mdtex = document.querySelector('#mdtex');
-                if (btn.innerHTML == 'Hide Code!') {
+                if (btn.innerHTML == 'Hide Code') {
                     out.style.width='100%';
-                    //out.style.margin='auto';
                     mdtex.style.display='none';
-                    btn.innerHTML = 'Show Code!';
+                    btn.innerHTML = 'Show Code';
                 } else {
-                    out.style.width='49%';
-                    //out.style.margin='auto';
+                    out.style.width='65%';
                     mdtex.style.display='block';
-                    btn.innerHTML = 'Hide Code!';
+                    btn.innerHTML = 'Hide Code';
                 }
             }
         </script>
