@@ -176,7 +176,12 @@
                     mdtex.style.display='none';
                     btn.innerHTML = 'Show Code';
                 } else {
-                    out.style.width='65%';
+                    mediaQuery = window.matchMedia('only screen and (max-width: 980px)');
+                    if (mediaQuery.matches) {
+                        out.style.width='100%';
+                    } else {
+                        out.style.width='65%';
+                    }
                     mdtex.style.display='block';
                     btn.innerHTML = 'Hide Code';
                 }
