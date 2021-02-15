@@ -71,18 +71,24 @@ def mdtex_socket(ws):
         replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
         replyj = json.dumps(replyd)
         asyncio.run(sendUpdate())
-        message = ws.receive()
+        try:
+            message = ws.receive()
+        except:
+            # close connection on error, client may reconnect
+            break
 
 async def sendUpdate():
     html = mdTeX2html.convert(mdtex.value)
     replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
     replyj = json.dumps(replyd)        
-    for ws in USERS: # TODO use .copy() or similar, but that might cause an error as well when trying to send no non-existing.
+    for ws in USERS.copy():
         try:
             ws.send(replyj)
         except:
-            #send() raises a ConnectionClosed exception when the client disconnects which will exit the while True loop
-            USERS.remove(ws)
+            try:
+                USERS.remove(ws)
+            except WebSocketError:
+                pass
             app.logger.warn('I did not reach a ws-client; I kicked it!')
 
 # run it:
