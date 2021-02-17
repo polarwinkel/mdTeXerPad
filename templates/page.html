@@ -70,9 +70,6 @@
     </head>
     <body style="background-color:#040;">
         <h3>mdTeXerPad</h3>
-        <div id="notConnected" style="width:100%;background-color:#faa;display:none;">
-            <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
-        </div>
         <div id="container">
             <div id="htmlOut"></div>
             <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
@@ -80,6 +77,9 @@
         <div style="text-align:center; clear:both; margin:1rem;">
             <button id="editMode" onclick="edit()">Edit</button>
             <button id="hideCode" onclick="hideCode()">Hide Code</button>
+        </div>
+        <div id="notConnected" style="width:100%;background-color:#faa;display:none;">
+            <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
         </div>
         <footer style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
             <p>(c) 2020-2021 Dirk Winkel, licensed under GPLv3 or newer - <a href="https://github.com/polarwinkel/mdTeXerPad" target="_blank">Fork me on GitHub</a></p>
