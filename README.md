@@ -42,14 +42,17 @@ server {
     server_name <your.tld>;
     location / {
         # any path for the location like ´/mtp/´ is fine as well
-        proxy_pass              http://<your ip or localhost>:8000/; # The / is important!
+        proxy_pass              http://localhost:8000/; # The / is important!
         proxy_set_header        Host            $host;
         proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header        X-Remote-User   $remote_user;
-        proxy_http_version      1.1;
-        proxy_set_header        Upgrade         $http_upgrade;
-        proxy_set_header        Connection "Upgrade";
-        proxy_set_header        Host            $host;
+        proxy_set_header        X-Remote-User $remote_user;
+        proxy_http_version 1.1;
+        proxy_connect_timeout 2h;
+        proxy_send_timeout 2h;
+        proxy_read_timeout 2h;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
     }
 }
 ```
