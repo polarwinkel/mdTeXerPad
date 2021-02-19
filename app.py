@@ -44,6 +44,8 @@ def sendStatic(path):
 
 # WebSocketServer-stuff:
 
+# Only 1 gunicorn-worker is supported since the connections are stored 
+# in variables that the other workers can't access!
 USERS = set()
 mdtex = type('', (), {})() # empty object, so that it is available in all async functions
 mdtex.value = '''
@@ -60,9 +62,13 @@ Delete this and write your own `mdTeX`!
 
 @sockets.route('/ws')
 def mdtex_socket(ws):
-    app.logger.info('ws connected: '+str(request.remote_addr))
     if ws not in USERS:
         USERS.add(ws)
+        app.logger.info('ws connected: '+str(request.remote_addr)+', '+str(len(USERS))+' users online now')
+    html = mdTeX2html.convert(mdtex.value)
+    replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
+    replyj = json.dumps(replyd)
+    ws.send(replyj)
     message = None
     while True:
         if message != None:
@@ -70,7 +76,8 @@ def mdtex_socket(ws):
         html = mdTeX2html.convert(mdtex.value)
         replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
         replyj = json.dumps(replyd)
-        asyncio.run(sendUpdate())
+        if message != None:
+            asyncio.run(sendUpdate())
         try:
             message = ws.receive()
         except:
@@ -80,7 +87,7 @@ def mdtex_socket(ws):
 async def sendUpdate():
     html = mdTeX2html.convert(mdtex.value)
     replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
-    replyj = json.dumps(replyd)        
+    replyj = json.dumps(replyd)
     for ws in USERS.copy():
         try:
             ws.send(replyj)
@@ -89,7 +96,8 @@ async def sendUpdate():
                 USERS.remove(ws)
             except WebSocketError:
                 pass
-            app.logger.warn('I did not reach a ws-client; I kicked it!')
+                # garbage collector will remove dead object
+            app.logger.info('One ws-client was dropped, '+str(len(USERS))+' users remain')
 
 # run it:
 

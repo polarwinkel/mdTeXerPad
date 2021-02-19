@@ -24,7 +24,5 @@ RUN chown mtp:mtp * -R
 
 EXPOSE 8000
 #CMD    ["python3", "app.py"]
-# for n cores use 2n+1 workers
-#CMD gunicorn3 -w $(expr $(nproc) \* 2 + 1) -b :8081 mdTeXerPad:app
-CMD gunicorn3 -k flask_sockets.worker --bind 0.0.0.0:8000 --error-logfile /var/log/gunicorn/error.log --access-logfile /var/log/gunicorn/access.log app:app
-#CMD gunicorn3 -k flask_sockets.worker --bind 0.0.0.0:8000 --enable-stdio-inheritance --log-level debug app:app
+CMD gunicorn3 -k flask_sockets.worker --bind 0.0.0.0:8000 -w 1 --timeout 3600 --keep-alive 10 --error-logfile /var/log/gunicorn/error.log --access-logfile /var/log/gunicorn/access.log app:app
+#CMD gunicorn3 -k flask_sockets.worker --bind 0.0.0.0:8000 -w 1 --timeout 3600 --keep-alive 10 app:app
