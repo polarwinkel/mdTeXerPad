@@ -59,7 +59,7 @@ def convert(mdtex):
         except:
             mathml = convError
         if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts before formula!
-            parts[0]=parts[0]+' '
+            parts[0]=parts[0]+'&#x200b;'
         if len(parts)==3:
             result = convert(parts[0]+mathml+parts[2])
         else:
@@ -90,7 +90,7 @@ def convert(mdtex):
         except:
             mathml = convError
         if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts before formula!
-            parts[0]=parts[0]+' '
+            parts[0]=parts[0]+'&#x200b;'
         if len(subp)==2:
             result = convert(parts[0]+mathml+subp[1])
         else:
