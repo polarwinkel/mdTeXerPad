@@ -1,0 +1,93 @@
+/* for proper form-sizing */
+* {
+  box-sizing: border-box;
+}
+/* basics */
+html {
+    background-color: #040;
+    font-family: "latin modern roman", Garamond, Georgia, "Times New Roman", Times, sans-serif;
+}
+a {
+    color:#060;
+    text-decoration: none;
+    cursor: pointer;
+}
+math {
+    font-size: 1em;
+}
+div.blockformula {
+    text-align: center;
+}
+/* other stuff */
+button {
+    font-size: 1em;
+    font-family: "latin modern roman", Garamond, Georgia, "Times New Roman", Times, sans-serif;
+}
+table {
+    background-color: #fff;
+}
+/* print */
+@page {
+    margin: 2cm;
+}
+@media print {
+    html {
+        font-size: 12pt;
+    }
+    .no-print {
+        display: none !important;
+    }
+}
+/* fonts */
+@font-face {
+    font-family: "latin modern roman";
+    src: url("lmroman10-regular.woff2") format('woff2');
+}
+@font-face {
+    font-family: "latin modern roman";
+    src: url("lmroman10-bold.woff2") format('woff2');
+    font-weight: bold;
+}
+@font-face {
+    font-family: "latin modern roman";
+    src: url("lmroman10-bolditalic.woff2") format('woff2');
+    font-weight: bold;
+    font-style: italic;
+}
+@font-face {
+    font-family: "latin modern roman";
+    src: url("lmroman10-italic.woff2") format('woff2');
+    font-style: italic;
+}
+/* dark-mode */
+@media (prefers-color-scheme: dark) {
+    html {
+        color: white;
+    }
+    textarea {
+        background-color: #333;
+        color: white;
+        border: 1px solid black;
+    }
+    input {
+        background-color: #333;
+        color: white;
+        border: 1px solid black;
+    }
+    select {
+        background-color: #444;
+        color: white;
+        border: 1px solid black;
+    }
+    button {
+        background-color: #222;
+        color: white;
+        border: 1px solid black;
+    }
+    a {
+        color:#4f4;
+    }
+    table {
+        background-color: #222;
+    }
+}

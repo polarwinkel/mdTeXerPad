@@ -1,87 +1,28 @@
-<!doctype html><html>
-<head>
-    <title>mdTeXerPad</title>
+<!doctype html>
+<html>
+    <head>
+        <title>mdTeXerPad</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.svg') }}">
-        <link rel="icon" href="static/favicon.svg">
-        <link rel="stylesheet" type="text/css" href="static/main.css" />
-        <style>
-            /* general */
-            div#container {
-                display: flex;
-                flex-direction: row-reverse;
-                flex-wrap:wrap;
-                align-items: stretch;
-                justify-content: space-evenly;
-            }
-            div#htmlOut {
-                border:1px solid black;
-                width:65%;
-                background-color:#fff;
-                min-height:2rem;
-            }
-            textarea#mdtex {
-                width:33%;
-            }
-            /* for mobiles */
-            @media only screen and (max-width: 980px) {
-                html {
-                    margin: 0;
-                    padding: 0;
-                }
-                body {
-                    margin: 0.4;
-                    padding: 0;
-                }
-                textarea#mdtex {
-                    width:100%;
-                    margin:auto;
-                    height:250px;
-                }
-                div#htmlOut {
-                    width:100%;
-                    margin:auto;
-                    margin-bottom: 1rem;
-                    padding:0.2rem;
-                }
-            }
-            /* dark-mode */
-            @media (prefers-color-scheme: dark) {
-                textarea#mdtex {
-                    background-color: #222;
-                    color: white;
-                    border: 1px solid black;
-                }
-                textarea#mdtex:disabled {
-                    background-color: #111;
-                    color: #666;
-                }
-                div#htmlOut {
-                    background-color: #222;
-                    color: white;
-                }
-                button {
-                    background-color: #222;
-                    color: white;
-                }
-            }
-        </style>
+        <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='polar.css') }}" />
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}" />
     </head>
-    <body style="background-color:#040;">
-        <h3>mdTeXerPad</h3>
+    <body>
+        <h3 class="no-print" style="text-align:center;">mdTeXerPad</h3>
         <div id="container">
             <div id="htmlOut"></div>
-            <textarea id="mdtex" oninput="sendMdTeX()" disabled></textarea>
+            <textarea id="mdtex" class="no-print" oninput="sendMdTeX()" disabled></textarea>
         </div>
-        <div style="text-align:center; clear:both; margin:1rem;">
+        <div class="no-print" style="text-align:center; clear:both; margin:1rem;">
             <button id="editMode" onclick="edit()">Edit</button>
             <button id="hideCode" onclick="hideCode()">Hide Code</button>
         </div>
-        <div id="notConnected" style="width:100%;background-color:#faa;display:none;">
+        <div id="notConnected" class="no-print" style="width:100%;background-color:rgba(255,150,150,0.5);display:none;">
             <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
         </div>
-        <footer style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
+        <footer class="no-print" style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
             <p>(c) 2020-2021 Dirk Winkel, licensed under GPLv3 or newer - <a href="https://github.com/polarwinkel/mdTeXerPad" target="_blank">Fork me on GitHub</a></p>
         </footer>
         <script>
