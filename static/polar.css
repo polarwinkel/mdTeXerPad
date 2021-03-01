@@ -5,7 +5,8 @@
 /* basics */
 html {
     background-color: #040;
-    font-family: "latin modern roman", Garamond, Georgia, "Times New Roman", Times, sans-serif;
+    font-family: Latin Modern Roman, serif;
+    font-size: x-large;
 }
 a {
     color:#060;
@@ -13,18 +14,36 @@ a {
     cursor: pointer;
 }
 math {
+    font-family: Latin Modern Math
     font-size: 1em;
 }
 div.blockformula {
     text-align: center;
 }
-/* other stuff */
-button {
-    font-size: 1em;
-    font-family: "latin modern roman", Garamond, Georgia, "Times New Roman", Times, sans-serif;
+code {
+    border-radius: 0.3em;
+    background-color: rgba(127,127,127,0.4);
 }
+/* other stuff */
 table {
     background-color: #fff;
+}
+/* forms */
+button {
+    font-size: 1em;
+    font-family: Latin Modern Roman, serif;
+}
+select {
+    font-size: 1em;
+    font-family: Latin Modern Roman, serif;
+}
+input {
+    font-size: 1em;
+    font-family: Latin Modern Roman, serif;
+}
+textarea {
+    font-size: 0.8em;
+    font-family: Latin Modern Mono, monospace;
 }
 /* print */
 @page {
@@ -40,24 +59,32 @@ table {
 }
 /* fonts */
 @font-face {
-    font-family: "latin modern roman";
+    font-family: Latin Modern Roman;
     src: url("lmroman10-regular.woff2") format('woff2');
 }
 @font-face {
-    font-family: "latin modern roman";
+    font-family: Latin Modern Roman;
     src: url("lmroman10-bold.woff2") format('woff2');
     font-weight: bold;
 }
 @font-face {
-    font-family: "latin modern roman";
+    font-family: Latin Modern Roman;
     src: url("lmroman10-bolditalic.woff2") format('woff2');
     font-weight: bold;
     font-style: italic;
 }
 @font-face {
-    font-family: "latin modern roman";
+    font-family: Latin Modern Roman;
     src: url("lmroman10-italic.woff2") format('woff2');
     font-style: italic;
+}
+@font-face {
+    font-family: Latin Modern Mono;
+    src: url("lmmono10-regular.woff2") format('woff2');
+}
+@font-face {
+    font-family: Latin Modern Math;
+    src: local('Latin Modern Math'), local('LatinModernMath-Regular'), url("latinmodern-math.woff2") format('woff2');
 }
 /* dark-mode */
 @media (prefers-color-scheme: dark) {
