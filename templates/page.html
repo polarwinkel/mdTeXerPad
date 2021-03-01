@@ -16,8 +16,14 @@
             <textarea id="mdtex" class="no-print" oninput="sendMdTeX()" disabled></textarea>
         </div>
         <div class="no-print" style="text-align:center; clear:both; margin:1rem;">
-            <button id="editMode" onclick="edit()">Edit</button>
+            <button id="print" onclick="window.print();">pdf/print</button>
+            <button id="save" onclick="save()">Save</button>
             <button id="hideCode" onclick="hideCode()">Hide Code</button>
+            <button id="editMode" onclick="toggleEdit()">Edit</button>
+        </div>
+        <div id="loadctl" class="no-print" style="text-align:center; clear:both; margin:1rem; display:none;">
+            <input type="file" name="loadfile" id="loadfile">
+            <button id="load" onclick="load()">load</button>
         </div>
         <div id="notConnected" class="no-print" style="width:100%;background-color:rgba(255,150,150,0.5);display:none;">
             <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
@@ -50,7 +56,6 @@
                         }
                     } else {
                         mdtex.disabled = true;
-                        alert('TODO: Besser machen!');
                     }
                 }
                 ws.onmessage = function (event) {
@@ -86,19 +91,39 @@
             if (window.location.pathname.endsWith('edit')) {
                 mdtex.disabled = false;
                 document.getElementById('editMode').innerHTML = 'Quit edit mode';
+                document.getElementById('loadctl').style.display='block';
+            }
+            function load() {
+                var file = document.getElementById('loadfile').files[0];
+                var fr=new FileReader();
+                fr.onload=function(){
+                    mdtex.value=fr.result;
+                    mdtex.dispatchEvent(new Event("input"));
+                }
+                fr.readAsText(file);
+            }
+            function save() {
+                text = mdtex.value,
+                    blob = new Blob([text], { type: 'text/plain' }),
+                    anchor = document.createElement('a');
+                anchor.download = "filename.mdtex";
+                anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+                anchor.dataset.downloadurl = ['text/plain', anchor.download, anchor.href].join(':');
+                anchor.click();                
             }
             document.onkeydown = function(e){
                 if(e.ctrlKey && e.which === 83){ // Check for the Ctrl key being pressed, and if the key = [S] (83)
-                    alert('ERROR 501: TODO: speichern implementieren');
+                    save();
                     e.preventDefault();
                     return false;
                 }
             }
-            function edit() {
+            function toggleEdit() {
                 btn = document.getElementById('editMode');
                 if (btn.innerHTML == 'Quit edit mode') {
                     window.location.assign(window.location.href.slice(0, -4))
                     btn.innerHTML = 'Edit';
+                    document.getElementById('loadctl').style.display='none';
                 } else {
                     // TODO: Warn when someone is already editing? > get info from Server
                     // Not blocking multiple editing users:
@@ -106,6 +131,7 @@
                     // - can be useful as it is
                     window.location.assign(window.location.href.concat('edit'))
                     btn.innerHTML = 'Quit edit mode';
+                    document.getElementById('loadctl').style.display='block';
                 }
             }
             function hideCode() {

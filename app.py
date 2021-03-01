@@ -56,6 +56,7 @@ TeX-Formula: $\sqrt2=x^2 \Rightarrow x=\sqrt{\sqrt{2}}$
 - This
 - is
     - a List
+- with an image ![Image](static/favicon.svg)
 
 Delete this and write your own `mdTeX`!
 '''
