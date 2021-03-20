@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# __author__ = "Ronie Martinez"
-# __copyright__ = "Copyright 2016-2020, Ronie Martinez"
-# __credits__ = ["Ronie Martinez"]
-# __maintainer__ = "Ronie Martinez"
-# __email__ = "ronmarti18@gmail.com"
 from collections import OrderedDict
 from typing import Dict, Tuple
 
@@ -22,6 +16,7 @@ MATRICES = (
     r"\Vmatrix*",
     r"\array",
     r"\substack",
+    r"\cases",
 )
 
 SPACES = (r"\,", r"\:", r"\;", r"\\", r"\quad", r"\qquad")
@@ -51,6 +46,7 @@ COMMANDS: Dict[str, Tuple[int, str, dict]] = {
     r"\limits": (3, "munderover", {}),
     r"\overrightarrow": (1, "mover", {}),
     r"\vec": (1, "mover", {}),
+    r"\dot": (1, "mover", {}),
 }
 
 LIMITS = [r"\lim", r"\sup", r"\inf", r"\max", r"\min"]

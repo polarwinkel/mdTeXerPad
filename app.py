@@ -14,7 +14,7 @@ from flask import Flask, render_template, request, send_from_directory, make_res
 from flask_sockets import Sockets # Not working on Ubuntu 20.04 due to an old version of gevent
 import asyncio
 import json
-from modules import mdTeX2html
+import mdtex2html
 
 # global settings:
 
@@ -29,6 +29,8 @@ if __name__ != '__main__':
 sockets = Sockets(app)
 
 host='0.0.0.0'
+
+extensions=['tables']
 
 # WebServer stuff:
 
@@ -66,7 +68,7 @@ def mdtex_socket(ws):
     if ws not in USERS:
         USERS.add(ws)
         app.logger.info('ws connected: '+str(request.remote_addr)+', '+str(len(USERS))+' users online now')
-    html = mdTeX2html.convert(mdtex.value)
+    html = mdtex2html.convert(mdtex.value, extensions)
     replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
     replyj = json.dumps(replyd)
     ws.send(replyj)
@@ -74,7 +76,7 @@ def mdtex_socket(ws):
     while True:
         if message != None:
             mdtex.value = str(message)
-        html = mdTeX2html.convert(mdtex.value)
+        html = mdtex2html.convert(mdtex.value, extensions)
         replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
         replyj = json.dumps(replyd)
         if message != None:
@@ -86,7 +88,7 @@ def mdtex_socket(ws):
             break
 
 async def sendUpdate():
-    html = mdTeX2html.convert(mdtex.value)
+    html = mdtex2html.convert(mdtex.value, extensions)
     replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
     replyj = json.dumps(replyd)
     for ws in USERS.copy():
