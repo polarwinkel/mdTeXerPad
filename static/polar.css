@@ -27,6 +27,19 @@ code {
 /* other stuff */
 table {
     background-color: #fff;
+    border:1px solid #888;
+    border-collapse: collapse;
+}
+table tr {
+    border: 1px dashed #888;
+}
+table th {
+    border-right:1px solid #888; 
+    border-left:1px solid #888;
+}
+table td {
+    border-right:1px solid #888; 
+    border-left:1px solid #888;
 }
 /* forms */
 button {
