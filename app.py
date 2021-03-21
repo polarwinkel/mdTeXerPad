@@ -30,7 +30,7 @@ sockets = Sockets(app)
 
 host='0.0.0.0'
 
-extensions=['tables']
+extensions=['def_list', 'fenced_code', 'md_in_html', 'tables', 'admonition', 'nl2br', 'sane_lists', 'toc']
 
 # WebServer stuff:
 
