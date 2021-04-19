@@ -13,6 +13,9 @@ a {
     text-decoration: none;
     cursor: pointer;
 }
+blockquote {
+    font-size: smaller;
+}
 math {
     font-family: Latin Modern Math
     font-size: 1em;
