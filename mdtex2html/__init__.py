@@ -30,8 +30,8 @@ from latex2mathml.converter import convert as tex2mathml
 from markdown import markdown as md2html
 import re
 
-incomplete = '<font color="orange">&#9888;</font>'
-convError = '<font color="red">&#9888;</font>'
+incomplete = '<font style="color:orange;" class="tooltip">&#9888;<span class="tooltiptext">formula incomplete</span></font>'
+convError = '<font style="color:red" class="tooltip">&#9888;<span class="tooltiptext">LaTeX-convert-error</span></font>'
 
 def convert(mdtex, extensions=[], splitParagraphs=True):
     ''' converts recursively the Markdown-LaTeX-mixture to HTML with MathML '''

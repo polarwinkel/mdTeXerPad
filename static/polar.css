@@ -61,6 +61,13 @@ textarea {
     font-size: 0.8em;
     font-family: Latin Modern Mono, monospace;
 }
+/* tooltips */
+.tooltip .tooltiptext {
+    visibility: hidden;
+}
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
 /* print */
 @page {
     margin: 2cm;
