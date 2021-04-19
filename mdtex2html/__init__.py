@@ -6,7 +6,7 @@ The Formulas will be in MathML-Format.
 block-equations need to start with $$ or \[
 inline-equations start with \( or $
 
-version 1.2.0beta1
+version 1.2.0
 
 (c) 2020-2021 by Dirk Winkel
 

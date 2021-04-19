@@ -1,3 +1,4 @@
+/* v1.1.1 */
 /* for proper form-sizing */
 * {
   box-sizing: border-box;
@@ -63,10 +64,13 @@ textarea {
 }
 /* tooltips */
 .tooltip .tooltiptext {
-    visibility: hidden;
+    display: none;
 }
 .tooltip:hover .tooltiptext {
-    visibility: visible;
+    display: inline;
+    border-radius: 0.3em;
+    background-color: #777;
+    position: fixed;
 }
 /* print */
 @page {
