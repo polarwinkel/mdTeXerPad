@@ -28,9 +28,14 @@
         <div id="notConnected" class="no-print" style="width:100%;background-color:rgba(255,150,150,0.5);display:none;">
             <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
         </div>
+        <div>
+            <input id="allowJs" name="allowJs" type="checkbox" />
+            <label for="allowJs">allow JavaScript-Execution (might be dangerous if untrusted code can be injected!)</label>
+        </div>
         <footer class="no-print" style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
             <p>(c) 2020-2021 Dirk Winkel, licensed under GPLv3 or newer - <a href="https://github.com/polarwinkel/mdTeXerPad" target="_blank">Fork me on GitHub</a></p>
         </footer>
+        <script src="./static/plotLine.js"></script> 
         <script>
             var subpath = '{{ path }}';
             function connect() {
@@ -62,6 +67,9 @@
                     data = JSON.parse(event.data);
                     out = document.getElementById('htmlOut');
                     out.innerHTML = data.html;
+                    if (document.getElementById('allowJs').checked) {
+                        runInnerHtmlJs(innerHTML);
+                    }
                     if (window.location.pathname.endsWith('edit') == false ||
                             mdtex.value == '') {
                         // just one person should edit at a time:
@@ -86,6 +94,16 @@
                     console.error('Socket encountered error: ', err.message, 'Closing socket');
                     ws.close();
                 };
+            }
+            function runInnerHtmlJs(element) {
+                elements = element.querySelectorAll('script');
+                for (var i=0; i<elements.length; i++) {
+                    var oldScript = elements[i];
+                    var newScript = document.createElement('script');
+                    Array.from(oldScript.attributes).forEach( attr => newScript.setAttribute(attr.name, attr.value) );
+                    newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+                    oldScript.parentNode.replaceChild(newScript, oldScript);
+                }
             }
             connect();
             if (window.location.pathname.endsWith('edit')) {
