@@ -68,7 +68,7 @@
                     out = document.getElementById('htmlOut');
                     out.innerHTML = data.html;
                     if (document.getElementById('allowJs').checked) {
-                        runInnerHtmlJs(out.innerHTML);
+                        runInnerHtmlJs(out);
                     }
                     if (window.location.pathname.endsWith('edit') == false ||
                             mdtex.value == '') {
