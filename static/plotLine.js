@@ -26,7 +26,7 @@
  * y_axis = _true_ / false to show or hide y axis (boolean)
  * x_label = _true_ / false to show or hide x labels (boolean)
  * y_label = _true_ / false to show or hide y labels (boolean)
- * points = _true_ / false to draw points (boolean)
+ * drawpoints = true / false to draw points (boolean)
  * smooth = true / _false_ to use splines to smoothen the graph (boolean)
  * fill = true / _false_ to fill below the graph or not (boolean)
  */
@@ -44,13 +44,13 @@ function plotQuick(data, min=0, max=1) {
     if (typeof data == 'object') {
         pl = new plotLine()
         pl.addGraph();
-        pl.addGraph('plot', 'blue');
+        pl.addGraph('plot', 'green');
         pl.addPoints('plot', data);
         pl.draw();
-    } else if (typeof data == 'function') {
-        pl = new plotLine()
+    } else if (typeof data == 'string') {
+        pl = new plotLine(arg = {'drawpoints': false});
         pl.addGraph();
-        pl.addGraph('plot', 'blue');
+        pl.addGraph('plot', 'green');
         pl.addFunction('plot', data, min, max);
         pl.draw();
     } else {
@@ -273,7 +273,8 @@ plotLine.prototype.addPoints = function (graph, data) {
 plotLine.prototype.addFunction = function (graph, func, x_min=-10, x_max=10, n=100) {
     for(var point = 0; point <= n; point++) {
         var x = x_min+(x_max-x_min)/n*point;
-        var y = func(x);
+        const F = new Function('x', 'return ' + func);
+        var y = F(x);
         var insert = {'graph': graph, 'x': x, 'y': y};
         this.raw_points.push(insert);
     }
@@ -462,7 +463,7 @@ plotLine.prototype.scale = function(data) {
 };
 
 // draw graphs
-plotLine.prototype.draw = function() {
+plotLine.prototype.draw = function(drawp = this.drawpoints) {
     var scale = this.scale(this.raw_points);
     var points = [], path;
     var px, py;
