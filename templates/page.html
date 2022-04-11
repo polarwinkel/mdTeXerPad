@@ -29,7 +29,7 @@
             <p style="text-align:center;">Not connected to WebSocketServer!<!--<button onclick="connect()">Try Reconnect</button>--></p>
         </div>
         <div>
-            <input id="allowJs" name="allowJs" type="checkbox" />
+            <input id="allowJs" name="allowJs" type="checkbox" onclick="runInnerHtmlJs(document.getElementById('htmlOut'))" />
             <label for="allowJs">allow JavaScript-Execution (might be dangerous if untrusted code can be injected!)</label>
         </div>
         <footer class="no-print" style="font-size:0.7rem; float:right; clear:both; margin-bottom:1rem;">
