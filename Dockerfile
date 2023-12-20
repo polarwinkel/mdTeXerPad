@@ -2,7 +2,7 @@
 #
 # VERSION               0.2
 
-FROM debian:bookworm-slim
+FROM debian:bullseye-slim
 
 # install stuff
 RUN apt-get update && apt-get install -y \
