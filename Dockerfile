@@ -1,9 +1,8 @@
 # mdTeXerPad
 #
-# VERSION               0.1
+# VERSION               0.2
 
-FROM debian:bullseye-slim
-#FROM ubuntu:19.10
+FROM debian:bookworm-slim
 
 # install stuff
 RUN apt-get update && apt-get install -y \
