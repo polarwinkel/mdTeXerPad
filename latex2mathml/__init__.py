@@ -1,3 +1,3 @@
-#from importlib import metadata
+from importlib import metadata
 
-#__version__ = metadata.version("latex2mathml")
+__version__ = '3.77.0'#metadata.version("latex2mathml")

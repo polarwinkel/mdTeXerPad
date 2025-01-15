@@ -7,9 +7,9 @@ The Formulas will be in MathML-Format.
 - inline-equations start with \( or $
 - $-signs can be escaped with \, so \$ will be returned as $
 
-version 1.3.0
+version 1.3.1
 
-(c) 2020-2024 by Dirk Winkel
+(c) 2020-2025 by Dirk Winkel
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@ version 1.3.0
 
 from latex2mathml.converter import convert as tex2mathml
 from markdown import markdown as md2html
+from markdown import Markdown
 import re, random, string
 
 incomplete = '<font style="color:orange;" class="tooltip">&#9888;<span class="tooltiptext">formula incomplete</span></font>'
@@ -37,6 +38,11 @@ convError = '<font style="color:red" class="tooltip">&#9888;<span class="tooltip
 def convert(mdtex, extensions=[], splitParagraphs=True):
     ''' converts recursively the Markdown-LaTeX-mixture to HTML with MathML '''
     found = False
+    # render table of contents before splitting it up:
+    if 'toc' in extensions and splitParagraphs and '[TOC]' in mdtex:
+        md = Markdown(extensions=['toc'])
+        md.convert(mdtex)
+        mdtex = mdtex.replace('[TOC]', md.toc)
     # entirely skip code-blocks:
     parts = re.split('```', mdtex, 2)
     if len(parts)>1:
@@ -89,7 +95,7 @@ def convert(mdtex, extensions=[], splitParagraphs=True):
             mathml = tex2mathml(parts[1])
         except:
             mathml = convError
-        if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts before formula!
+        if parts[0].endswith('\n') or parts[0]=='': # make sure textblock starts before formula!
             parts[0]=parts[0]+'&#x200b;'
         if len(parts)==3:
             result = convert(parts[0]+mathml+parts[2], extensions, splitParagraphs=False)
