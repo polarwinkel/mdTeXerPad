@@ -2,7 +2,7 @@
 #
 # VERSION               0.2
 
-FROM debian:bullseye-slim
+FROM debian:trixie-slim
 
 # install stuff
 RUN apt-get update && apt-get install -y \
