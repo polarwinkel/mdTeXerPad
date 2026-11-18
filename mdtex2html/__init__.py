@@ -7,22 +7,21 @@ The Formulas will be in MathML-Format.
 - inline-equations start with \( or $
 - $-signs can be escaped with \, so \$ will be returned as $
 
-version 1.3.1
+version 1.3.2
 
 (c) 2020-2025 by Dirk Winkel
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+This program is free software: you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free
+Software Foundation, either version 2.1 of the License, or (at your option) any
+later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License along
+with this program.  If not, see <http://www.gnu.org/licenses/>.
     
     
 '''
@@ -44,7 +43,7 @@ def convert(mdtex, extensions=[], splitParagraphs=True):
         md.convert(mdtex)
         mdtex = mdtex.replace('[TOC]', md.toc)
     # entirely skip code-blocks:
-    parts = re.split('```', mdtex, 2)
+    parts = re.split('```', mdtex, maxsplit=2)
     if len(parts)>1:
         found = True
         result = convert(parts[0], extensions, splitParagraphs=False)+'\n'
@@ -60,7 +59,7 @@ def convert(mdtex, extensions=[], splitParagraphs=True):
             result += convert(part, extensions, splitParagraphs=False)
         return result
     # skip code-spans:
-    parts = re.split('`', mdtex, 2)
+    parts = re.split('`', mdtex, maxsplit=2)
     if len(parts)>1:
         found = True
         codehtml = md2html('`'+parts[1]+'`', extensions=extensions)
@@ -74,7 +73,7 @@ def convert(mdtex, extensions=[], splitParagraphs=True):
         result = result.replace('CoDeRePlAcEmEnT'+ranString, codehtml)
     # find first $$-formula:
     else:
-        parts = re.split('\${2}', mdtex, 2)
+        parts = re.split('\${2}', mdtex, maxsplit=2)
     if len(parts)>1 and not found:
         found = True
         result = convert(parts[0], extensions, splitParagraphs=False)+'\n'
@@ -88,7 +87,7 @@ def convert(mdtex, extensions=[], splitParagraphs=True):
             result += '<div class="blockformula">'+incomplete+'</div>'
     # else find first $-formulas, excluding \$:
     else:
-        parts = re.split(r'(?<!\\)\${1}', mdtex, 2)
+        parts = re.split(r'(?<!\\)\${1}', mdtex, maxsplit=2)
     if len(parts)>1 and not found:
         found = True
         try:
@@ -104,11 +103,11 @@ def convert(mdtex, extensions=[], splitParagraphs=True):
     # else find first \[..\]-equation:
     else:
         mdtex = mdtex.replace(r'\$', '$')
-        parts = re.split(r'\\\[', mdtex, 1)
+        parts = re.split(r'\\\[', mdtex, maxsplit=1)
     if len(parts)>1 and not found:
         found = True
         result = convert(parts[0], extensions, splitParagraphs=False)+'\n'
-        parts = re.split(r'\\\]', parts[1], 1)
+        parts = re.split(r'\\\]', parts[1], maxsplit=1)
         try:
             result += '<div class="blockformula">'+tex2mathml(parts[0])+'</div>\n'
         except:
@@ -119,10 +118,10 @@ def convert(mdtex, extensions=[], splitParagraphs=True):
             result += '<div class="blockformula">'+incomplete+'</div>'
     # else find first \(..\)-equation:
     else:
-        parts = re.split(r'\\\(', mdtex, 1)
+        parts = re.split(r'\\\(', mdtex, maxsplit=1)
     if len(parts)>1 and not found:
         found = True
-        subp = re.split(r'\\\)', parts[1], 1)
+        subp = re.split(r'\\\)', parts[1], maxsplit=1)
         try:
             mathml = tex2mathml(subp[0])
         except:
