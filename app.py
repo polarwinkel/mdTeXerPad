@@ -11,7 +11,8 @@ import os
 import logging
 from contextvars import ContextVar
 from flask import Flask, render_template, request, send_from_directory, make_response, jsonify
-from flask_sockets import Sockets # Not working on Ubuntu 20.04 due to an old version of gevent
+#from flask_sockets import Sockets # Not working on Ubuntu 20.04 due to an old version of gevent
+from flask_sock import Sock
 import asyncio
 import json
 import mdtex2html
@@ -26,7 +27,7 @@ if __name__ != '__main__':
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
 
-sockets = Sockets(app)
+sock = Sock(app)
 
 host='0.0.0.0'
 
@@ -63,7 +64,7 @@ TeX-Formula: $\sqrt2=x^2 \Rightarrow x=\sqrt{\sqrt{2}}$
 Delete this and write your own `mdTeX`!
 '''
 
-@sockets.route('/ws')
+@sock.route(path='/ws')
 def mdtex_socket(ws):
     if ws not in USERS:
         USERS.add(ws)
