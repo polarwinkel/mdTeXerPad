@@ -7,11 +7,9 @@ FROM debian:trixie-slim
 # install stuff
 RUN apt-get update && apt-get install -y \
     python3 \
-    python3-websockets \
     python3-markdown \
     gunicorn3 \
     python3-flask \
-    python3-flask-sockets \
     python3-simple-websocket
 
 # copy stuff to the container
