@@ -16,12 +16,10 @@ You, as well as all other users on the site, will see the on-time rendering on t
 - clone the repository or download this
 - make sure you have the dependencies installed as listed in the `Dockerfile`
 - Run it by either
-    - executing `gunicorn3 -k flask_sockets.worker --bind 0.0.0.0:8000 app:app` (the performance-option)
+    - executing `gunicorn3 --bind 0.0.0.0:8000 app:app` (the performance-option)
     - or `python3 app.py` (development-option, will be port 5000 then)
 - point your Browser to `localhost:8000` and start to mdTeXing!
     - mdTeXerPad will also be available from your local network, you can change this by setting `onlyLocal = True` in the `mdTeXerPad.py`!
-
-It will _not_ run on Debian Buster and Ubuntu 20.04 without getting the dependencies from pip since some dependencies in apt are missing (Debian Buster) or broken (Ubuntu 20.04). Debian Bullseye is fine!
 
 ### The Docker way
 
@@ -65,9 +63,8 @@ You can then have nginx limit access, encrypt the traffic etc.
 
 This is intended for the use with a school class in one lesson and is tested for up to 30 users and pads with ~100 lines of code.
 
-- There is **just one Pad** to work on (so far...)
+- There is **just one Pad** to work on (unlike i.e. etherpad)
 - only one person at a time should/can edit
-- it is developed **only for Firefox** (uses MathML for LaTeX-Formulas) **Edge/Chrome won't render formulas correctly**
 - it is **not checked for security issues**, be sure to restrict access to trusted persons and(/or) run the docker version for isolation/sandboxing!
 
 If you need it bigger feel free to fork and change this or commit a pull-request.

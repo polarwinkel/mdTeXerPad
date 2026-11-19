@@ -22,5 +22,9 @@ RUN chown mtp:mtp * -R
 
 EXPOSE 8000
 #CMD    ["python3", "app.py"]
-CMD gunicorn3 --bind 0.0.0.0:8000 -w 1 --timeout 3600 --keep-alive 10 --error-logfile /var/log/gunicorn/error.log --access-logfile /var/log/gunicorn/access.log app:app
+CMD gunicorn3 --bind 0.0.0.0:8000 \
+  --workers 1 --worker-class gthread --threads 3 \
+  --timeout 3600 --keep-alive 10 \
+  --error-logfile - --access-logfile - \
+  app:app
 #CMD gunicorn3 --bind 0.0.0.0:8000 -w 1 --timeout 3600 --keep-alive 10 app:app
