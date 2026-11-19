@@ -74,19 +74,22 @@ def mdtex_socket(ws):
     replyj = json.dumps(replyd)
     ws.send(replyj)
     message = None
-    while True:
-        if message != None:
-            mdtex.value = str(message)
-        html = mdtex2html.convert(mdtex.value, extensions)
-        replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
-        replyj = json.dumps(replyd)
-        if message != None:
-            asyncio.run(sendUpdate())
-        try:
-            message = ws.receive()
-        except:
-            # close connection on error, client may reconnect
-            break
+    try:
+        while True:
+            if message != None:
+                mdtex.value = str(message)
+            html = mdtex2html.convert(mdtex.value, extensions)
+            replyd = {'mdtex': mdtex.value, 'html': html, 'users': str(len(USERS))}
+            replyj = json.dumps(replyd)
+            if message != None:
+                asyncio.run(sendUpdate())
+            try:
+                message = ws.receive()
+            except:
+                # close connection on error, client may reconnect
+                break
+    finally:
+        USERS.discard(ws) # clean up unused connections
 
 async def sendUpdate():
     html = mdtex2html.convert(mdtex.value, extensions)
